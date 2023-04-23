@@ -1,0 +1,47 @@
+<head>
+  <%= javascript_include_tag('render.js') %>
+</head>
+
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-md-10">
+      <% i = 0 %>
+      <% @deck.each do|row|%>
+        <div class="row">
+          <% row.each do|elem|%>
+            <% i += 1 %>
+            <div class="col-md-1">
+              <input type="number" id="<%=i%>" value="<%= elem %>" min="1" max="9" style="width: 50%">
+              <% if(i%3==0) %>
+                |
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+        <% if(i%27==0) %>
+          <hr>
+        <% else %>
+          <br>
+        <% end %>
+        <br>
+      <% end %>
+
+    </div>
+
+    <div class="col-md-2">
+      <%=form_with(url: manual_fill_path) do |f|%>
+        <%=f.hidden_field :deck, id:"deck" %>
+        <%= f.submit value:"Check", :class => "btn btn-success btn-xs", :onclick=>"transform()" %>
+      <%end %>
+      <br>
+      <%=form_with(url: auto_fill_path) do |f|%>
+        <%=f.hidden_field :deck, id:"deck" %>
+        <%= f.submit value:"Auto-complete", :class => "btn btn-success btn-xs", :onclick=>"transform()"%>
+      <%end %>
+    </div>
+
+  </div>
+
+</div>
