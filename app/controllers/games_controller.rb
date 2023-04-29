@@ -14,7 +14,6 @@ class GamesController < ApplicationController
       redirect_to root_path
       return
     end
-    # Game.print_deck(@deck)
 
     message = Game.check_deck(@deck)
     flash.notice = message
