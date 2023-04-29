@@ -12,9 +12,61 @@ class Game
   def self.auto_generation
     deck = initialize
 
-    # add code for auto generation
+    cells_to_fill = (81 * 0.3).round
+    cells_to_fill.times do
+      i, j = rand(9), rand(9)
+      while deck[i][j] != 0
+        i, j = rand(9), rand(9)
+      end
 
+      num = rand(1..9)
+      while !check_position(deck, i, j, num)
+        num = rand(1..9)
+      end
+      deck[i][j] = num
+    end
     return deck
+  end
+
+  def self.check_position(deck, i, j, num)
+
+    # check row
+    for inner_i in (0..deck.size - 1)
+      if(inner_i == i)
+        next
+      end
+
+      if(deck[inner_i][j] == num)
+        return false
+      end
+    end
+
+    #  check column
+    for inner_j in (0..deck.size - 1)
+      if(inner_j == j)
+        next
+      end
+
+      if(deck[i][inner_j] == num)
+        return false
+      end
+    end
+
+    # check square
+    square_i = 3*(i/3)
+    square_j = 3*(j/3)
+    for inner_i in (square_i..square_i+2)
+      for inner_j in (square_j..square_j+2)
+        if(inner_i == i && inner_j == j)
+          next
+        end
+        if(deck[inner_i][inner_j] == num)
+          return false
+        end
+      end
+    end
+
+    return true
   end
 
   def self.auto_fill(deck)
