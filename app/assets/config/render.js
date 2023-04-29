@@ -10,4 +10,5 @@ function transform(){
     }
     str = str.slice(0, -1);
     document.getElementById('deck').value = str;
+    document.getElementById('deck_auto').value = str;
 }

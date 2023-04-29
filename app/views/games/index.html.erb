@@ -37,7 +37,7 @@
       <%end %>
       <br>
       <%=form_with(url: auto_fill_path) do |f|%>
-        <%=f.hidden_field :deck, id:"deck" %>
+        <%=f.hidden_field :deck, id:"deck_auto" %>
         <%= f.submit value:"Auto-complete", :class => "btn btn-success btn-xs", :onclick=>"transform()"%>
       <%end %>
     </div>
