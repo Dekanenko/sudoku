@@ -27,6 +27,38 @@ class Game
     end
     return deck
   end
+  def self.auto_fill(deck)
+    auto_fill_sudoku(deck, 0, 0)
+
+    return deck
+  end
+
+  def self.auto_fill_sudoku(sudoku, row=0, col=0)
+    return true if row == sudoku.length - 1 && col == sudoku.length  # базовый случай: достигнут конец судоку
+
+    if col == sudoku.length # переход на следующую строку, если достигнут конец текущей строки
+      row += 1
+      col = 0
+    end
+
+    if sudoku[row][col] != 0 # ячейка не пустая, пропускаем
+      return auto_fill_sudoku(sudoku, row, col + 1)
+    end
+
+      # пробуем заполнить ячейку числом от 1 до 9
+    (1..9).each do |num|
+      if check_position(sudoku, row, col, num)
+        sudoku[row][col] = num # вставляем число в ячейку
+        if auto_fill_sudoku(sudoku, row, col + 1)
+          return true # если удалось рекурсивно заполнить судоку, то возвращаем true
+        end
+        sudoku[row][col] = 0 # откатываем изменения, если заполнение было неудачным
+      end
+    end
+
+    return false # если не удалось найти корректное число для заполнения текущей ячейки, то возвращаем false
+  end
+
 
   def self.check_position(deck, i, j, num)
 
@@ -69,37 +101,6 @@ class Game
     return true
   end
 
-  def self.auto_fill(deck)
-    auto_fill_sudoku(deck, 0, 0)
-
-    return deck
-  end
-
-    def self.auto_fill_sudoku(sudoku, row=0, col=0)
-      return true if row == sudoku.length - 1 && col == sudoku.length # базовый случай: достигнут конец судоку
-
-      if col == sudoku.length # переход на следующую строку, если достигнут конец текущей строки
-        row += 1
-        col = 0
-      end
-
-      if sudoku[row][col] != 0 # ячейка не пустая, пропускаем
-        return auto_fill_sudoku(sudoku, row, col + 1)
-      end
-
-      # пробуем заполнить ячейку числом от 1 до 9
-      (1..9).each do |num|
-        if check_position(sudoku, row, col, num)
-          sudoku[row][col] = num # вставляем число в ячейку
-          if auto_fill_sudoku(sudoku, row, col + 1)
-            return true # если удалось рекурсивно заполнить судоку, то возвращаем true
-          end
-          sudoku[row][col] = 0 # откатываем изменения, если заполнение было неудачным
-        end
-      end
-
-      return false # если не удалось найти корректное число для заполнения текущей ячейки, то возвращаем false
-    end
 
   def self.check_deck(deck)
     tmp = check_rows(deck)
@@ -192,45 +193,5 @@ class Game
     return true
   end
 
-    def self.check_position(deck, i, j, num)
-
-      # check row
-      for inner_i in (0..deck.size - 1)
-        if(inner_i == i)
-          next
-        end
-
-        if(deck[inner_i][j] == num)
-          return false
-        end
-      end
-
-      #  check column
-      for inner_j in (0..deck.size - 1)
-        if(inner_j == j)
-          next
-        end
-
-        if(deck[i][inner_j] == num)
-          return false
-        end
-      end
-
-      # check square
-      square_i = 3*(i/3)
-      square_j = 3*(j/3)
-      for inner_i in (square_i..square_i+2)
-        for inner_j in (square_j..square_j+2)
-          if(inner_i == i && inner_j == j)
-            next
-          end
-          if(deck[inner_i][inner_j] == num)
-            return false
-          end
-        end
-      end
-
-      return true
-    end
 
 end
