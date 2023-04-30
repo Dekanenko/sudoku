@@ -11,9 +11,7 @@ class Game
 
   def self.auto_generation
     deck = initialize
-
-    cells_to_fill = (81 * 0.3).round
-    cells_to_fill.times do
+    9.times do
       i, j = rand(9), rand(9)
       while deck[i][j] != 0
         i, j = rand(9), rand(9)
@@ -25,6 +23,17 @@ class Game
       end
       deck[i][j] = num
     end
+
+    deck = auto_fill(deck)
+    cells_to_vanish = (81 * 0.7).round
+    cells_to_vanish.times do
+      i, j = rand(9), rand(9)
+      while deck[i][j] == 0
+        i, j = rand(9), rand(9)
+      end
+      deck[i][j] = 0
+    end
+
     return deck
   end
   def self.auto_fill(deck)
