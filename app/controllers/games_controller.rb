@@ -2,8 +2,12 @@
 
 class GamesController < ApplicationController
 
+  @@lock
+
   def index
     @deck = Game.initialize
+    @lock = Game.initialize
+    @@lock = @lock
   end
 
 
@@ -14,10 +18,12 @@ class GamesController < ApplicationController
       redirect_to root_path
       return
     end
+    # Game.print_deck(@deck)
 
     message = Game.check_deck(@deck)
     flash.notice = message
 
+    @lock = @@lock
     render "games/index"
   end
 
@@ -29,12 +35,21 @@ class GamesController < ApplicationController
       return
     end
 
-    @deck = Game.auto_fill(@deck)
+    @lock = @@lock
+    tmp = Game.auto_fill(@deck)
+
+    if(tmp.nil?)
+      flash.alert = "This deck cannot be solved!!!"
+    else
+      @deck = tmp
+    end
+
     render "games/index"
   end
 
   def auto_generation
-    @deck = Game.auto_generation
+    @deck, @lock = Game.auto_generation
+    @@lock = @lock
     render "games/index"
   end
 
