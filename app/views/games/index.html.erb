@@ -13,7 +13,13 @@
           <% row.each do|elem|%>
             <% i += 1 %>
             <div class="col-md-1">
-              <input type="number" id="<%=i%>" value="<%= elem %>" min="1" max="9" style="width: 50%">
+
+              <% if @lock[(i-1)/9][i-9*((i-1)/9)-1] == 1 && @deck[(i-1)/9][i-9*((i-1)/9)-1] != 0%>
+                <input type="number" id="<%=i%>" value="<%= elem %>" min="1" max="9" readonly style="width: 50%; background: lightgray">
+              <% else %>
+                <input type="number" id="<%=i%>" value="<%= elem %>" min="1" max="9" style="width: 50%">
+              <% end %>
+
               <% if(i%3==0) %>
                 |
               <% end %>

@@ -2,15 +2,17 @@
 
 class Game
 
-  def self.initialize
-    deck = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-             [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+  def self.initialize(x = 0)
+    deck = [[x, x, x, x, x, x, x, x, x], [x, x, x, x, x, x, x, x, x], [x, x, x, x, x, x, x, x, x],
+            [x, x, x, x, x, x, x, x, x], [x, x, x, x, x, x, x, x, x], [x, x, x, x, x, x, x, x, x],
+            [x, x, x, x, x, x, x, x, x], [x, x, x, x, x, x, x, x, x], [x, x, x, x, x, x, x, x, x]]
     return deck
   end
 
   def self.auto_generation
     deck = initialize
+    lock = initialize(1)
+
     9.times do
       i, j = rand(9), rand(9)
       while deck[i][j] != 0
@@ -32,12 +34,20 @@ class Game
         i, j = rand(9), rand(9)
       end
       deck[i][j] = 0
+      lock[i][j] = 0
     end
 
-    return deck
+    return deck, lock
   end
   def self.auto_fill(deck)
-    auto_fill_sudoku(deck, 0, 0)
+
+    if(check_rows(deck) != -1 || check_columns(deck) != -1 || check_squares(deck) != "")
+      return nil
+    end
+
+    if(!auto_fill_sudoku(deck, 0, 0))
+      return nil
+    end
 
     return deck
   end
